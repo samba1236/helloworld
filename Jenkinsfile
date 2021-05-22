@@ -1,10 +1,11 @@
 pipeline{
 
-       agent any
-          tools {
-              maven 'Maven 3.3.9'
-              jdk 'jdk8'
-          }
+       gent {
+                docker {
+                image 'maven'
+                args '-v $HOME/.m2:/root/.m2'
+                }
+             }
 
         stages{
 
