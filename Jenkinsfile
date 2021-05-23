@@ -3,7 +3,7 @@ pipeline{
        agent {
         docker {
             image 'maven' 
-            label 'maven'
+            label 'master'
         }
     }
 
