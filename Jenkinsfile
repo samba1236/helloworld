@@ -29,6 +29,23 @@ pipeline{
                	 }
               }
               
+	      stage('build'){
+		      steps {
+			      script{
+			    String Docker_tag = sh(script: "git log -1 --pretty=%h", returnStdout: true).trim()
+			    sh 'echo "Docker_tag==" $Docker_tag'
 
-                   }
+                sh 'docker build . -t samba1236/sonarqube:$Docker_tag'
+				
+                withCredentials([string(credentialsId: 'docker_password', variable: 'docker_password')]) {
+                sh 'docker login -u deekshithsn -p $docker_password'
+                sh 'docker push deekshithsn/devops-training:$Docker_tag'
+                }
+
+			      }
+		      }
               }
+
+            }
+}
+
