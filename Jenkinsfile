@@ -1,15 +1,6 @@
 pipeline{
 
-<<<<<<< HEAD
         agent any
-=======
-       agent {
-        docker {
-            image 'maven' 
-            label 'master'
-        }
-    }
->>>>>>> c8e73e086a585e7f679c4bac74c6471286375ef4
 
         stages{
 
