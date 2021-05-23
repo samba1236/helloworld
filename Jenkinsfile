@@ -28,29 +28,7 @@ pipeline{
                  	}
                	 }
               }
-              stage('Initialize'){
-                      def dockerHome = tool 'docker'
-                      env.PATH = "${dockerHome}/bin:${env.PATH}"
-                  }
-
-              stage('build'){
-              		      steps {
-              			      script{
-              			    String Docker_tag = sh(script: "git log -1 --pretty=%h", returnStdout: true).trim()
-              			    sh 'echo "Docker_tag==" $Docker_tag'
-
-                            sh 'docker build . -t samba1236/sonarqube:$Docker_tag'
-
-                            withCredentials([string(credentialsId: 'docker pasw', variable: 'docker-paswrd')]) {
-
-                            sh 'docker login -u samba1236 -p $docker-paswrd'
-                            sh 'docker push samba1236/sonarqube:$Docker_tag'
-
-                           }
-
-              	         }
-              	       }
-                     }
+              
 
                    }
               }
