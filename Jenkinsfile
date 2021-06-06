@@ -34,7 +34,7 @@ pipeline{
 
             // Make a tag and push
             sh "sudo docker login -u samba1236 -p Samba@1236 https://index.docker.io"
-            withDockerRegistry(credentialsId: 'samba1236', toolName: 'docker', url: 'https://index.docker.io') {
+            withDockerRegistry(credentialsId: 'docker', toolName: 'docker', url: 'https://index.docker.io/v1/') {
                 sh "sudo docker tag ${containerId} ${dockerPushResource}"
                 sh "sudo docker push ${dockerPushResource}"
             }
