@@ -21,6 +21,8 @@ pipeline{
     stage('build') {
       steps {
         script {
+          def dockerHome = tool 'docker'
+          env.PATH = "${dockerHome}/bin:${env.PATH}"
           String Docker_tag = sh(script: "git log -1 --pretty=%h", returnStdout: true).trim()
           sh 'echo "Docker_tag==" $Docker_tag'
 
