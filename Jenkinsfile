@@ -25,7 +25,7 @@ pipeline{
           env.PATH = "${dockerHome}/bin:${env.PATH}"
           // Login to the Artifactory Docker registry
           // The Docker resource value is docker.repo1.uhc.com
-           sh "docker login -u samba1236 -p Samba@1236 dockerhub.com
+           sh "docker login -u samba1236 -p Samba@1236
            String containerId = sh(script: "docker build -f Dockerfile ./ | tail -1", returnStdout: true).split(' ')[2].trim()
             echo "Container Id: ${containerId}"
             String dockerPushResource = "samba1236/sonarqube:kubernetes"
