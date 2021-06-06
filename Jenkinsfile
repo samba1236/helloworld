@@ -1,42 +1,27 @@
 pipeline {
   agent any
   stages {
-    stage('Install') {
+    stage('Sonar helloworld  analysis') {
       steps {
-        echo 'Installation...'
+          withSonarQubeEnv('SonarCloud') {
+            script {
+              def scannerHome = tool 'SonarScanner';
+              sh "${scannerHome}/bin/sonar-scanner"
+            }
+          }
       }
     }
-    stage('Test') {
+    stage("SonarQube scanner") {
       steps {
-        echo 'Testing...'
-
+          timeout(time: 5, unit: 'MINUTES') {
+            script {
+              def qg = waitForQualityGate() // Reuse taskId previously collected by withSonarQubeEnv
+              if (qg.status != 'OK') {
+                echo "Quality gate failed: ${qg.status}, proceeding anyway"
+              }
+            }
+          }
       }
-    }
-    stage('Sonarqube') {
-      environment {
-
-        scannerHome = tool 'sonar_scanner'
-      }
-
-      steps {
-        script {
-        withSonarQubeEnv('SonarQube') {
-          sh "${scannerHome}/bin/sonar-scanner.sh"
-        }
-       }
-      }
-      timeout(time: 10, unit: 'MINUTES') {
-        //waitForQualityGate abortPipeline: true
-        def qg = waitForQualityGate()
-        if (qg.status != 'OK') {
-          error "Pipeline aborted due to quality gate failure: ${qg.status}"
-        }
-      }
-    }
-  }
-  stage('Build') {
-    steps {
-      echo 'Production build...'
     }
   }
 }
