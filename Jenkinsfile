@@ -5,8 +5,9 @@ pipeline{
       steps {
         script {
           withSonarQubeEnv('sonarserver') {
-            def scannerHome = tool 'SonarScanner';
-            sh "${scannerHome}/bin/sonar-scanner"
+            //def scannerHome = tool 'SonarScanner';
+            //sh "${scannerHome}/bin/sonar-scanner"
+            sh "mvn sonar:sonar"
           }
           timeout(time: 1, unit: 'HOURS') {
             def qg = waitForQualityGate()
@@ -14,6 +15,7 @@ pipeline{
               error "Pipeline aborted due to quality gate failure: ${qg.status}"
             }
           }
+          sh "mvn clean install"
         }
       }
     }
