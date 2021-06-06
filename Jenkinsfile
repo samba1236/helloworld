@@ -1,51 +1,37 @@
-pipeline{
-
-        agent any
-
-        stages{
-
-              stage('Quality Gate Status Check'){
-              agent {
-                       docker {
-                       label 'master'
-                       image 'maven'
-                       args '-v $HOME/.m2:/root/.m2'
-                      }
-                    }
-                  steps{
-                      script{
-			      withSonarQubeEnv('sonarserver') {
-			      sh "mvn sonar:sonar"
-                       	     	}
-			      timeout(time: 1, unit: 'HOURS') {
-			      def qg = waitForQualityGate()
-				      if (qg.status != 'OK') {
-					   error "Pipeline aborted due to quality gate failure: ${qg.status}"
-				      }
-                    		}
-		    	    sh "mvn clean install"
-
-                 	}
-               	 }
-              }
-              
-	      stage('build'){
-		      steps {
-			      script{
-			    String Docker_tag = sh(script: "git log -1 --pretty=%h", returnStdout: true).trim()
-			    sh 'echo "Docker_tag==" $Docker_tag'
-
-                sh 'docker build . -t samba1236/sonarqube:$Docker_tag'
-				
-                withCredentials([string(credentialsId: 'docker_password', variable: 'docker_password')]) {
-                sh 'docker login -u deekshithsn -p $docker_password'
-                sh 'docker push deekshithsn/devops-training:$Docker_tag'
-                }
-
-			      }
-		      }
-              }
+pipeline {
+    agent any
+       stages {
+        stage('Install') {
+            steps {
+                echo 'Installation...'
+            }
+        }
+        stage('Test') {
+            steps {
+                echo 'Testing...'
 
             }
-}
+        }
+        stage('Sonarqube') {
+            environment {
 
+                 scannerHome = tool 'sonar_scanner'
+            }
+
+            steps {
+                echo 'Scanning....'
+                withSonarQubeEnv('Sonarqube') {
+                sh "${scannerHome}/bin/sonar-scanner"
+             }
+                timeout(time: 10, unit: 'MINUTES') {
+                waitForQualityGate abortPipeline: true
+            }
+        }
+    }
+    stage('Build') {
+            steps {
+                echo 'Production build...'
+            }
+        }
+    }
+}
