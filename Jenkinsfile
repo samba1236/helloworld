@@ -3,7 +3,7 @@ pipeline {
   stages {
     stage('Sonar helloworld  analysis') {
       steps {
-          withSonarQubeEnv('SonarCloud') {
+          withSonarQubeEnv('sonarserver') {
             script {
               def scannerHome = tool 'SonarScanner';
               sh "${scannerHome}/bin/sonar-scanner"
