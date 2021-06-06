@@ -28,13 +28,14 @@ pipeline{
           // Login to the Artifactory Docker registry
           // The Docker resource value is docker.repo1.uhc.com
 
-           sh "sudo docker login -u samba1236 -p Samba@1236 https://index.docker.io/"
            String containerId = sh(script: "sudo docker build -f Dockerfile ./ | tail -1", returnStdout: true).split(' ')[2].trim()
             echo "Container Id: ${containerId}"
             String dockerPushResource = "samba1236/sonarqube:kubernetes"
 
             // Make a tag and push
             sh "sudo docker tag ${containerId} ${dockerPushResource}"
+            sh "sudo docker login -u samba1236 -p Samba@1236 https://index.docker.io/"
+
             sh "sudo docker push ${dockerPushResource}"
           }
 
