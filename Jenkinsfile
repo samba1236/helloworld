@@ -1,21 +1,25 @@
-pipeline {
-
-  agent any
-
-  stages {
-
-    stage('Quality Gate Status Check') {
-    agent {
-       docker {
-       label 'master'
-       image 'maven'
-       args '-v $HOME/.m2:/root/.m2'
+pipeline{
+    agent any
+    stages{
+      stage('Quality Gate Status Check'){
+      agent {
+           docker {
+           label 'master'
+           image 'maven'
+           args '-v $HOME/.m2:/root/.m2'
+          }
         }
-       }
       steps {
         script {
           withSonarQubeEnv('sonarserver') {
-            sh "mvn sonar:sonar"
+            withMaven(
+                    mavenLocalRepo: '.repository', // (2)
+                    mavenSettingsConfig: 'my-maven-settings' // (3)
+                ) {
+                  // Run the maven build
+                sh "mvn sonar:sonar"
+
+                }
           }
           timeout(time: 1, unit: 'HOURS') {
             def qg = waitForQualityGate()
