@@ -5,15 +5,8 @@ pipeline{
       steps {
         script {
           withSonarQubeEnv('sonarserver') {
-            git url: 'https://github.com/cyrille-leclerc/multi-module-maven-project'
-            withMaven(
-                    mavenLocalRepo: '.repository', // (2)
-                    mavenSettingsConfig: 'my-maven-settings' // (3)
-                ) {
-                  // Run the maven build
-                sh "mvn sonar:sonar"
-
-                }
+            def scannerHome = tool 'SonarScanner';
+            sh "${scannerHome}/bin/sonar-scanner"
           }
           timeout(time: 1, unit: 'HOURS') {
             def qg = waitForQualityGate()
