@@ -23,14 +23,13 @@ pipeline{
         script {
           def dockerHome = tool 'docker'
           env.PATH = "${dockerHome}/bin:${env.PATH}"
-          String Docker_tag = sh(script: "git log -1 --pretty=%h", returnStdout: true).trim()
-          sh 'echo "Docker_tag==" $Docker_tag'
+           String containerId = sh(script: "docker build -f Dockerfile ./ | tail -1", returnStdout: true).split(' ')[2].trim()
+            echo "Container Id: ${containerId}"
+            String dockerPushResource = "samba1236/sonarqube:kubernetes"
 
-          sh 'docker build . -t samba1236/sonarqube:$Docker_tag'
-
-          withCredentials([string(credentialsId: 'docker_password', variable: 'docker_password')]) {
-            sh 'docker login -u samba1236 -p $docker_password'
-            sh 'docker push samba1236/sonarqube:$Docker_tag'
+            // Make a tag and push
+            sh "docker tag ${containerId} ${dockerPushResource}"
+            sh "docker push ${dockerPushResource}"
           }
 
         }
