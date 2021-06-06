@@ -2,13 +2,6 @@ pipeline{
     agent any
     stages{
       stage('Quality Gate Status Check'){
-      agent {
-           docker {
-           label 'master'
-           image 'maven'
-           args '-v $HOME/.m2:/root/.m2'
-          }
-        }
       steps {
         script {
           withSonarQubeEnv('sonarserver') {
