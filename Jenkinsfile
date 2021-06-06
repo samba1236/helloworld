@@ -5,6 +5,7 @@ pipeline{
       steps {
         script {
           withSonarQubeEnv('sonarserver') {
+            git url: 'https://github.com/cyrille-leclerc/multi-module-maven-project'
             withMaven(
                     mavenLocalRepo: '.repository', // (2)
                     mavenSettingsConfig: 'my-maven-settings' // (3)
