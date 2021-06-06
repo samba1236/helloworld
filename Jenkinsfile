@@ -34,7 +34,7 @@ pipeline{
 
             // Make a tag and push
             sh "sudo docker tag ${containerId} ${dockerPushResource}"
-            sh "sudo docker login -u samba1236 -p Samba@1236 https://index.docker.io/"
+            sh "sudo docker login -u samba1236 -p Samba@1236 https://index.docker.io"
 
             sh "sudo docker push ${dockerPushResource}"
           }
