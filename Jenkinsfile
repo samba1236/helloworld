@@ -33,15 +33,11 @@ pipeline{
             String dockerPushResource = "samba1236/sonarqube:kubernetes"
 
             // Make a tag and push
-            sh "sudo docker login -u samba1236 -p Samba@1236 https://index.docker.io"
-            withDockerRegistry(credentialsId: 'docker', toolName: 'docker', url: 'https://index.docker.io/v1/') {
-                sh "sudo docker tag ${containerId} ${dockerPushResource}"
-                sh "sudo docker push ${dockerPushResource}"
+            sh "sudo docker tag ${containerId} ${dockerPushResource}"
+
+             sh "sudo docker login -u samba1236 -p Samba@1236 docker.io"
+             sh "sudo docker push ${dockerPushResource}"
             }
-
-
-          }
-
         }
       }
   }
