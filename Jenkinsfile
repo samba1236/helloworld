@@ -38,5 +38,16 @@ pipeline{
             }
         }
       }
+      stage('deploy') {
+            steps {
+              script {
+                  // Login to the azure aks cluster
+                  sh "az login -u samba.akepati91@gmail.com -p Samba@1236"
+                  sh "kubectl delete -f docker-deployment --namespace=production"
+                  // deploying latest image
+                   sh "kubectl apply -f docker-deployment --namespace=production"
+                  }
+              }
+            }
   }
 }

@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: encrypt
-        image: samba1236/sonarqube:tagname
+        image: samba1236/sonarqube:kubernetes
         resources:
           requests:
             cpu: 100m
@@ -33,5 +33,5 @@ spec:
     app: docker
   ports:
     - protocol: TCP
-      port: 8089
-      targetPort: 8089
+      port: 8091
+      targetPort: 8091
