@@ -42,6 +42,7 @@ pipeline{
             steps {
               script {
                   // Login to the azure aks cluster
+                  sh "az aks get-credentials –resource-group AKSRG –name AKScluster01"
                   sh "az login -u samba.akepati91@gmail.com -p Samba@1236"
                   sh "kubectl delete -f docker-deployment --namespace=production"
                   // deploying latest image
@@ -49,5 +50,6 @@ pipeline{
                   }
               }
             }
+
   }
 }
