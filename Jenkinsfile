@@ -42,8 +42,8 @@ pipeline{
             steps {
               script {
                   // Login to the azure aks cluster
-                  //sh "az login --service-principal --username ff6f62b4-d57b-42de-b0d0-1a0d6e34ac94 --password LlaeZNoEJ65st1_lIT.-YKTJzo8oyW8456 --tenant 6184a51f-7158-48ba-adee-51e5f34edd5c"
-                  sh "az login -u samba.akepati91@gmail.com -p Samba@1236 --allow-no-subscriptions"
+                  sh "az login --service-principal --username ff6f62b4-d57b-42de-b0d0-1a0d6e34ac94 --password LlaeZNoEJ65st1_lIT.-YKTJzo8oyW8456 --tenant 6184a51f-7158-48ba-adee-51e5f34edd5c"
+                  //sh "az login -u samba.akepati91@gmail.com -p Samba@1236 --allow-no-subscriptions"
                   sh "az aks get-credentials --resource-group AKSRG --name AKScluster01"
                   sh "kubectl delete -f docker-deployment --namespace=production"
                   // deploying latest image
